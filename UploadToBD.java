@@ -11,6 +11,7 @@ import ru.job4j.psqltrackering.TrackerSQL;
 
 import java.io.InputStream;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -106,6 +107,21 @@ public class UploadToBD {
             LOG.error("check table error", e);
         }
         return false;
+    }
+
+    public List<String> print() {
+        List<String> temp = new ArrayList<>();
+        try (Statement st = connection.createStatement()) {
+            try (ResultSet res = st.executeQuery("select * from sqltable")) {
+                while (res.next()) {
+                    temp.add(res.getString("names"));
+                }
+                return temp;
+            }
+        } catch (SQLException e) {
+            LOG.error("print table error", e);
+        }
+        return temp;
     }
 
     public void close() {

@@ -7,10 +7,7 @@ package ru.job4j.parsersqlsite;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerFactory;
-import org.quartz.Trigger;
+import org.quartz.*;
 
 import java.util.Properties;
 
@@ -29,20 +26,32 @@ public class TimeStart {
     private static final Logger LOG = LogManager.getLogger(TimeStart.class.getName());
 
     public static void main(String[] args) {
+        String conf;
+        if (args.length > 0) {
+            conf = args[0];
+        } else {
+            conf = "site.properties";
+        }
         Config config = new Config();
-        Properties prop = config.getConfig();
-        String pattern  = prop.getProperty("cron.time");
+        Properties prop = config.getConfig(conf);
+        String pattern = prop.getProperty("cron.time");
         try {
             SchedulerFactory schedFact = new org.quartz.impl.StdSchedulerFactory();
             Scheduler sched = schedFact.getScheduler();
-            sched.start();
+            JobDataMap map = new JobDataMap();
+            map.put("jdbc.driver", prop.getProperty("jdbc.driver"));
+            map.put("jdbc.url", prop.getProperty("jdbc.url"));
+            map.put("jdbc.username", prop.getProperty("jdbc.username"));
+            map.put("jdbc.password", prop.getProperty("jdbc.password"));
             JobDetail job = newJob(SiteParserStart.class)
+                    .setJobData(map)
                     .build();
             Trigger trigger = newTrigger()
                     .startNow()
                     .withSchedule(cronSchedule(pattern))
                     .build();
             sched.scheduleJob(job, trigger);
+            sched.start();
         } catch (Exception e) {
             LOG.error("Schedule error", e);
         }

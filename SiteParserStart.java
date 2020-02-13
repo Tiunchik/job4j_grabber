@@ -7,9 +7,7 @@ package ru.job4j.parsersqlsite;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.quartz.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,10 +26,11 @@ public class SiteParserStart implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        JobDataMap temp = jobExecutionContext.getJobDetail().getJobDataMap();
+        Properties prop = new Properties();
         Calendar cal = Calendar.getInstance();
         Date date;
-        Config config = new Config();
-        Properties prop = config.getConfig();
+        prop.putAll(temp);
         UploadToBD sqlbase = new UploadToBD();
         sqlbase.makeConnection(prop);
         sqlbase.createDB();

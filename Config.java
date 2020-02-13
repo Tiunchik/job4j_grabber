@@ -23,9 +23,9 @@ import java.util.Properties;
 public class Config {
     private static final Logger LOG = LogManager.getLogger(Config.class.getName());
 
-    public Properties getConfig() {
+    public Properties getConfig(String name) {
         try (InputStream in = TrackerSQL.class.getClassLoader()
-                .getResourceAsStream("site.properties")) {
+                .getResourceAsStream(name)) {
             Properties config = new Properties();
             config.load(in);
             return config;

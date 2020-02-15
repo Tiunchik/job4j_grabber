@@ -19,8 +19,8 @@ import java.util.Properties;
  * Класс UploadToBD - клсс для работы с SQL сервевом
  *
  * @author Maksim Tiunchik (senebh@gmail.com)
- * @version 0.1
- * @since 12.02.2020
+ * @version 0.2
+ * @since 15.02.2020
  */
 public class UploadToBD {
     private static final Logger LOG = LogManager.getLogger(UploadToBD.class.getName());
@@ -83,6 +83,7 @@ public class UploadToBD {
                 pst.setString(1, e.name);
                 pst.setString(2, e.description);
                 pst.setString(3, e.link);
+                pst.execute();
             }
         } catch (SQLException e) {
             LOG.error("insert into sqltable error", e);

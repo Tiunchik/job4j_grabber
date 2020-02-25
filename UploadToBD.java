@@ -61,33 +61,31 @@ public class UploadToBD {
 
     public void createTable() {
         try (Statement st = connection.createStatement()) {
-            st.execute("create table if not exists sqltable (id serial primary key, names varchar(200), alltext text, links varchar(200))");
+            st.execute("create table if not exists sqltable (id serial primary key, names varchar(200) unique, alltext text, links varchar(200))");
         } catch (SQLException e) {
             LOG.error("create table error", e);
         }
     }
 
     public void upload(List<ParseSite.Node> exm) {
-        try (PreparedStatement pst = connection.prepareStatement("insert into sqltable (names, alltext, links) values (?,?,?)");
-             PreparedStatement checkst = connection.prepareCall("select count(names) as namecount from sqltable where names=?")) {
+        try (PreparedStatement pst = connection.prepareStatement("insert into sqltable (names, alltext, links) "
+                + "values (?,?,?) on conflict "
+                + "(names) do update set alltext = ?, links = "
+                + "? where sqltable.names = ?;")) {
             for (var e : exm) {
-                checkst.setString(1, e.name);
-                try (ResultSet res = checkst.executeQuery();
-                     PreparedStatement del = connection.prepareStatement("delete from sqltable where name=?")) {
-                    res.next();
-                    if (res.getInt("namecount") > 0) {
-                        del.setString(1, e.name);
-                        del.executeUpdate();
-                    }
-                }
                 pst.setString(1, e.name);
                 pst.setString(2, e.description);
                 pst.setString(3, e.link);
-                pst.execute();
+                pst.setString(4, e.description);
+                pst.setString(5, e.link);
+                pst.setString(6, e.name);
+                pst.addBatch();
             }
+            pst.executeBatch();
         } catch (SQLException e) {
             LOG.error("insert into sqltable error", e);
         }
+
     }
 
     public void dropTable() {

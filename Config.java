@@ -24,7 +24,7 @@ public class Config {
     private static final Logger LOG = LogManager.getLogger(Config.class.getName());
 
     public Properties getConfig(String name) {
-        try (InputStream in = TrackerSQL.class.getClassLoader()
+        try (InputStream in = TimeStart.class.getClassLoader()
                 .getResourceAsStream(name)) {
             Properties config = new Properties();
             config.load(in);

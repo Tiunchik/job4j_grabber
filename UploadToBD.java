@@ -7,9 +7,7 @@ package ru.job4j.parsersqlsite;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.job4j.psqltrackering.TrackerSQL;
 
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,7 @@ import java.util.Properties;
  * @version 0.2
  * @since 15.02.2020
  */
-public class UploadToBD {
+public class UploadToBD implements DBloader {
     private static final Logger LOG = LogManager.getLogger(UploadToBD.class.getName());
 
     UploadToBD() {
@@ -67,7 +65,7 @@ public class UploadToBD {
         }
     }
 
-    public void upload(List<ParseSite.Node> exm) {
+    public void upload(List<Node> exm) {
         try (PreparedStatement pst = connection.prepareStatement("insert into sqltable (names, alltext, links) "
                 + "values (?,?,?) on conflict "
                 + "(names) do update set alltext = ?, links = "

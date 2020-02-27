@@ -45,7 +45,7 @@ public class TimeStart {
             map.put("jdbc.username", prop.getProperty("jdbc.username"));
             map.put("jdbc.password", prop.getProperty("jdbc.password"));
 
-            JobDetail job = newJob(SiteParserStart.class)
+            JobDetail job = newJob(Parser.class)
                     .setJobData(map)
                     .build();
             Trigger triggerOne = newTrigger()
@@ -53,7 +53,7 @@ public class TimeStart {
                     .build();
             sched.scheduleJob(job, triggerOne);
 
-            JobDetail jobTwo = newJob(SiteParserStart.class)
+            JobDetail jobTwo = newJob(Parser.class)
                     .setJobData(map)
                     .build();
             Trigger triggerTwo = newTrigger()

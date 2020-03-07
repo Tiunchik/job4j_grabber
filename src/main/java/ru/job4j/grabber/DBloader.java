@@ -3,7 +3,7 @@
  *
  * @author Maksim Tiunchik
  */
-package ru.job4j.parsersqlsite;
+package ru.job4j.grabber;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

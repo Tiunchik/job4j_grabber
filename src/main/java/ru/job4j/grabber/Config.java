@@ -3,14 +3,12 @@
  *
  * @author Maksim Tiunchik
  */
-package ru.job4j.parsersqlsite;
+package ru.job4j.grabber;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.job4j.psqltrackering.TrackerSQL;
 
 import java.io.InputStream;
-import java.sql.DriverManager;
 import java.util.Properties;
 
 /**

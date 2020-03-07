@@ -3,7 +3,7 @@
  *
  * @author Maksim Tiunchik
  */
-package ru.job4j.parsersqlsite;
+package ru.job4j.grabber;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

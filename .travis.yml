@@ -3,8 +3,6 @@ language: java
 jdk:
   - openjdk13
 
-script: "mvn cobertura:cobertura"
-
 #services:
 #  - postgresql
 
